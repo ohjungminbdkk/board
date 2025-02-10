@@ -4,11 +4,12 @@ spring:
   thymeleaf:
     cache: false # 타임리프 캐시 끄기
     prefix: file:src/main/resources/templates/ # 타임리프 캐시 끄기(이 설정을 해야 꺼짐)
+    enabled: false
   devtools:
     livereload:
-        enabled: true
+      enabled: true
     restart:
-        enabled: true
+      enabled: true
 
   datasource:
     url: jdbc:mariadb://127.0.0.1:3306/qna_service?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
@@ -33,10 +34,13 @@ spring:
 
   logging:
     level:
-      root: INFO  # 전체 애플리케이션에 대한 로그 레벨 설정
-      org.springframework.web: DEBUG  # Spring MVC 관련 요청 로그
+      root: INFO # 전체 애플리케이션에 대한 로그 레벨 설정
+      org.springframework.web: DEBUG # Spring MVC 관련 요청 로그
       # org.hibernate.SQL: DEBUG
       org.hibernate.orm.jdbc.bind: TRACE
       org.hibernate.orm.jdbc.extract: TRACE
       org.mybatis: DEBUG
       org.apache.ibatis: DEBUG
+
+  server:
+    port: 80
