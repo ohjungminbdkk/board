@@ -12,8 +12,13 @@ public class HomeController {
 		return "hello";
 	}
 	
-    @GetMapping("/")
-    public String root() {
-        return "redirect:/question/list"; // 서버는 http 302 응답 반환
+	/*
+	 * @GetMapping("/") public String root() { return "redirect:/question/list"; //
+	 * 서버는 http 302 응답 반환 }
+	 */
+    
+    @GetMapping({"/", "/question/**"})
+    public String forward() {
+        return "forward:/index.html";  // Vue의 index.html을 반환
     }
 }
