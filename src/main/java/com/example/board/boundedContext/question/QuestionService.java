@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,15 +25,13 @@ public class QuestionService {
 
 	// 모든 질문 조회
 	public Page<Question> findQuestionAll(int page, String kw) {
-		// page : 요청된 페이지 번호(0부터 시작)
-		// 10 : 한 페이지에 표시할 데이터 갯수
-		int limit = 10;
-		int offset = page * limit; // 페이지 계산
-		List<Question> questionList = questionMapper.findAllWithKw(offset, limit, kw);
+	    int limit = 10;
+	    int offset = page * limit;
+	    List<Question> questionList = questionMapper.findAllWithKw(offset, limit, kw);
 
-		int total = questionList.size();
-		Pageable pageable = PageRequest.of(page, limit);
-		return new PageImpl<>(questionList, pageable, total);
+	    int total = questionMapper.countAllWithKw(kw); // 전체 개수 조회
+	    Pageable pageable = PageRequest.of(page, limit);
+	    return new PageImpl<>(questionList, pageable, total);
 	}
 
 	// 특정 질문 조회
@@ -47,7 +44,7 @@ public class QuestionService {
 		}
 	}
 
-	// 특정 질문의 댓글 및 대댓글 조회
+	// 특정 질문의 댓글 조회
 	public List<AnswerDto> getAnswersWithReplies(Integer parentId) {
 		List<Question> comments = questionMapper.findByParentIdAndDepth(parentId, 1);
 		List<AnswerDto> answerDtos = new ArrayList<>();
@@ -55,11 +52,6 @@ public class QuestionService {
 		for (Question comment : comments) {
 			AnswerDto dto = new AnswerDto();
 			dto.setComment(comment);
-
-			// 해당 댓글의 대댓글 조회
-			List<Question> replies = questionMapper.findByParentIdAndDepth(comment.getId(), 2);
-			dto.setReplies(replies);
-
 			answerDtos.add(dto);
 		}
 		return answerDtos;
@@ -90,16 +82,17 @@ public class QuestionService {
 	}
 
 	// 질문 수정
-	public void modify(Integer id, String subject, String content) {
-		Question question = questionMapper.findById(id);
-		if (question == null) {
-			throw new DataNotFoundException("question not found");
-		}
-		question.setSubject(subject);
-		question.setContent(content);
-		question.setUpdateDate(LocalDateTime.now());
+	public Question modify(Integer id, String subject, String content) {
+	    Question question = questionMapper.findById(id);
+	    if (question == null) {
+	        throw new DataNotFoundException("question not found");
+	    }
+	    question.setSubject(subject);
+	    question.setContent(content);
+	    question.setUpdateDate(LocalDateTime.now());
 
-		questionMapper.updateQuestion(question);
+	    questionMapper.updateQuestion(question);
+	    return question; // 수정된 객체 반환
 	}
 
 	// 질문 삭제 (하위 댓글 및 대댓글도 삭제)

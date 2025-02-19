@@ -9,5 +9,4 @@ import lombok.Data;
 @Data
 public class AnswerDto {
 	private Question comment; // 댓글 (depth=1)
-	private List<Question> replies; // 대댓글 (depth=2)
 }

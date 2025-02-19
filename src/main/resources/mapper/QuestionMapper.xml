@@ -123,5 +123,12 @@
 		SET content = #{content}, update_date = NOW()
 		WHERE id = #{id}
 	</update>
+	
+	<!-- 전체 질문 개수 조회 -->
+    <select id="countAllWithKw" resultType="int">
+        SELECT COUNT(*)
+        FROM question
+        WHERE subject LIKE CONCAT('%', #{kw}, '%')
+    </select>
 
 </mapper>

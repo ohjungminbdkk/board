@@ -1,7 +1,6 @@
 package com.example.board.boundedContext.question;
 
 import org.apache.ibatis.annotations.*;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -33,5 +32,7 @@ public interface QuestionMapper {
 	void updateAnswer(Question question);
 	
 	// 답변 조회
-	Question findFirstByIdAndDepth(Integer id, Integer depth);
+	Question findFirstByIdAndDepth(@Param("id") Integer id, @Param("depth") Integer depth);
+	
+	int countAllWithKw(@Param("kw") String kw);
 }

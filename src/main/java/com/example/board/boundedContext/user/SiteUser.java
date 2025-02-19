@@ -1,11 +1,6 @@
 package com.example.board.boundedContext.user;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,4 +20,8 @@ public class SiteUser {
 
     @Column(unique = true)
     private String email;
+
+    @Enumerated(EnumType.STRING) // Enum 값을 String 형태로 저장
+    private UserRole role; // 역할 추가 (USER, ADMIN)
+
 }

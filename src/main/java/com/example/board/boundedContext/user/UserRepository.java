@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import jakarta.transaction.Transactional;
 
 public interface UserRepository extends JpaRepository<SiteUser, Long> {
-	
-	Optional<SiteUser> findByusername(String username);
+
+	Optional<SiteUser> findByUsername(String username);
 
 	@Modifying
 	@Transactional

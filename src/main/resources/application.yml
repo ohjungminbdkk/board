@@ -36,6 +36,7 @@ spring:
     level:
       root: INFO # 전체 애플리케이션에 대한 로그 레벨 설정
       org.springframework.web: DEBUG # Spring MVC 관련 요청 로그
+      org.springframework.security: DEBUG
       # org.hibernate.SQL: DEBUG
       org.hibernate.orm.jdbc.bind: TRACE
       org.hibernate.orm.jdbc.extract: TRACE
@@ -43,4 +44,4 @@ spring:
       org.apache.ibatis: DEBUG
 
   server:
-    port: 80
+    port: 8080
