@@ -25,13 +25,13 @@ public class QuestionService {
 
 	// 모든 질문 조회
 	public Page<Question> findQuestionAll(int page, String kw) {
-	    int limit = 10;
-	    int offset = page * limit;
-	    List<Question> questionList = questionMapper.findAllWithKw(offset, limit, kw);
+		int limit = 10;
+		int offset = page * limit;
+		List<Question> questionList = questionMapper.findAllWithKw(offset, limit, kw);
 
-	    int total = questionMapper.countAllWithKw(kw); // 전체 개수 조회
-	    Pageable pageable = PageRequest.of(page, limit);
-	    return new PageImpl<>(questionList, pageable, total);
+		int total = questionMapper.countAllWithKw(kw); // 전체 개수 조회
+		Pageable pageable = PageRequest.of(page, limit);
+		return new PageImpl<>(questionList, pageable, total);
 	}
 
 	// 특정 질문 조회
@@ -60,56 +60,59 @@ public class QuestionService {
 	// 질문 생성 (댓글 및 대댓글 포함)
 	@Transactional
 	public Question create(String subject, String content, SiteUser author, Integer parentId) {
-	    Question question = new Question();
-	    question.setSubject(subject);
-	    question.setContent(content);
-	    question.setAuthor(author);
-	    question.setCreateDate(LocalDateTime.now());
-	    question.setUpdateDate(question.getCreateDate());
-	    question.setDepth(0); // 기본값: 질문
+		Question question = new Question();
+		question.setSubject(subject);
+		question.setContent(content);
+		question.setAuthor(author);
+		question.setCreateDate(LocalDateTime.now());
+		question.setUpdateDate(question.getCreateDate());
+		question.setDepth(0); // 기본값: 질문
 
-	    if (parentId != null) {
-	        Question parentQuestion = questionMapper.findById(parentId);
-	        if (parentQuestion == null) {
-	            throw new IllegalArgumentException("Parent question not found");
-	        }
-	        question.setParentId(parentQuestion.getId());
-	        question.setDepth(parentQuestion.getDepth() + 1);
-	    }
+		if (parentId != null) {
+			Question parentQuestion = questionMapper.findById(parentId);
+			if (parentQuestion == null) {
+				throw new IllegalArgumentException("Parent question not found");
+			}
+			question.setParentId(parentQuestion.getId());
+			question.setDepth(parentQuestion.getDepth() + 1);
+		}
 
-	    questionMapper.insertQuestion(question);
-	    return question;
+		questionMapper.insertQuestion(question);
+		return question;
 	}
 
 	// 질문 수정
 	public Question modify(Integer id, String subject, String content) {
-	    Question question = questionMapper.findById(id);
-	    if (question == null) {
-	        throw new DataNotFoundException("question not found");
-	    }
-	    question.setSubject(subject);
-	    question.setContent(content);
-	    question.setUpdateDate(LocalDateTime.now());
+		Question question = questionMapper.findById(id);
+		if (question == null) {
+			throw new DataNotFoundException("question not found");
+		}
+		question.setSubject(subject);
+		question.setContent(content);
+		question.setUpdateDate(LocalDateTime.now());
 
-	    questionMapper.updateQuestion(question);
-	    return question; // 수정된 객체 반환
+		questionMapper.updateQuestion(question);
+		return question; // 수정된 객체 반환
 	}
 
-	// 질문 삭제 (하위 댓글 및 대댓글도 삭제)
+	// 질문 삭제 (하위 댓글 포함 삭제)
 	@Transactional
 	public void delete(Question question) {
-		List<Question> childQuestions = questionMapper.findByParentIdAndDepth(question.getId(), 1);
-		for (Question child : childQuestions) {
-			questionMapper.deleteQuestion(child.getId());
-		}
+		// DDL정의에서 게시글ID를 부모ID에 참조되는 댓글을 지우도록 설정
+		// (FOREIGN KEY (`parent_id`) REFERENCES `question` (`id`) ON DELETE CASCADE)
+		/*
+		 * List<Question> childQuestions =
+		 * questionMapper.findByParentIdAndDepth(question.getId(), 1); for (Question
+		 * child : childQuestions) { questionMapper.deleteQuestion(child.getId()); }
+		 */
 		questionMapper.deleteQuestion(question.getId());
 	}
-	
+
 	// 댓글 가져오기
 	public Question getOneAnswer(Integer id, Integer depth) {
 		return questionMapper.findFirstByIdAndDepth(id, depth);
 	}
-	
+
 	// 댓글 수정
 	public void comentModify(Integer id, String content) {
 		Question question = questionMapper.findById(id);

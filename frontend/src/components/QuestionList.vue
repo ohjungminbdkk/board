@@ -22,15 +22,11 @@
       </thead>
       <tbody>
         <tr
-          v-for="(question, index) in questions"
+          v-for="question in questions"
           :key="question.id"
           class="text-center"
         >
-          <td>
-            {{
-              totalElements ? totalElements - (page * pageSize + index) : "-"
-            }}
-          </td>
+          <td>{{ question.id }}</td>
           <td class="text-start">
             <router-link :to="`/questions/${question.id}`" class="custom-link">
               {{ question.subject }}
@@ -71,7 +67,7 @@
         @keyup.enter="fetchQuestions"
         type="text"
         class="form-control"
-        placeholder="검색어를 입력하세요"
+        placeholder="검색어를 입력하세요(제목 & 내용(질문/답변))"
       />
       <button @click="fetchQuestions" class="btn btn-outline-secondary">
         검색
