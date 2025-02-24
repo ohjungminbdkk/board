@@ -13,7 +13,7 @@ public interface QuestionMapper {
 	// 특정 질문 조회 (ID로 찾기)
 	Question findById(@Param("id") Integer id);
 
-	// 댓글/대댓글 조회 (부모 ID & depth 기준)
+	// 댓글 조회 (부모 ID & depth 기준)
 	List<Question> findByParentIdAndDepth(@Param("parentId") Integer parentId, @Param("depth") Integer depth);
 
 	// 질문 삽입
