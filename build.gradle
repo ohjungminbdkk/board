@@ -3,50 +3,7 @@ plugins {
 	id 'org.springframework.boot' version '3.4.2'
 	id 'io.spring.dependency-management' version '1.1.7'
     id 'war'
-    id "com.github.node-gradle.node" version "3.1.1"
 }
-
-node {
-    download = true
-    version = "22.13.1"
-    npmVersion = "10.9.2"
-    distBaseUrl = "https://nodejs.org/dist"
-    workDir = file("${project.projectDir}/.gradle/nodejs")
-    npmWorkDir = file("${project.projectDir}/.gradle/npm")
-    nodeProjectDir = file('./frontend')
-}
-
-task setUp(type: com.github.gradle.node.npm.task.NpmTask) {
-    description = "Install Node.js Packages"
-    workingDir = file("${project.projectDir}/frontend")
-    args = ['install']
-
-    execOverrides {
-        it.executable = file("${project.projectDir}/.gradle/npm/npm-v10.9.2/npm.cmd").absolutePath
-        it.environment("PATH", "${node.workDir}/node-v22.13.1-win-x64/bin;" + System.getenv("PATH"))
-    }
-}
-
-task buildFrontEnd(type: com.github.gradle.node.npm.task.NpmTask) {
-    description = "Build the frontend using npm"
-    workingDir = file("${project.projectDir}/frontend")
-    args = ['run', 'build']
-
-    execOverrides {
-        it.executable = file("${project.projectDir}/.gradle/npm/npm-v10.9.2/npm.cmd").absolutePath
-        it.environment("PATH", "${node.workDir}/node-v22.13.1-win-x64/bin;" + System.getenv("PATH"))
-    }
-}
-
-processResources.dependsOn 'buildFrontEnd'
-
-sourceSets {
-    main {
-		resources {
-			srcDir './src/resources/static'
-				}    
-         }
-	}
 
 apply plugin: 'war'
 bootWar {

@@ -76,7 +76,7 @@ export default {
     // 회원가입 처리 함수
     const handleSignup = async () => {
       if (password1.value !== password2.value) {
-        errorMessage.value = "❌ 비밀번호가 일치하지 않습니다.";
+        errorMessage.value = "비밀번호가 일치하지 않습니다.";
         return;
       }
 
@@ -90,11 +90,11 @@ export default {
 
         if (response.status === 201) {
           successMessage.value =
-            "🎉 회원가입이 완료되었습니다! 로그인 페이지로 이동합니다.";
+            "회원가입이 완료되었습니다! 로그인 페이지로 이동합니다.";
           setTimeout(() => router.push("/login"), 1500);
         }
       } catch (error) {
-        console.error("❌ 회원가입 실패:", error);
+        console.error("회원가입 실패:", error);
         errorMessage.value =
           error.response?.data?.error || "회원가입에 실패했습니다.";
       }
