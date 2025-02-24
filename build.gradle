@@ -29,7 +29,7 @@ task setUp(type: com.github.gradle.node.npm.task.NpmTask) {
 
 task buildFrontEnd(type: com.github.gradle.node.npm.task.NpmTask) {
     description = "Build the frontend using npm"
-    workingDir = file("${project.projectDir}/frontend")  // frontend 경로 지정
+    workingDir = file("${project.projectDir}/frontend")
     args = ['run', 'build']
 
     execOverrides {
