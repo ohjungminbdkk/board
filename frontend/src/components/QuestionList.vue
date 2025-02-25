@@ -98,10 +98,7 @@ export default {
         const response = await axios.get(`/questions/${questionId}/answers`);
         return response.data.length;
       } catch (error) {
-        console.error(
-          `❌ 댓글 수 가져오기 실패 (질문 ID: ${questionId}):`,
-          error
-        );
+        console.error(`댓글 수 가져오기 실패 (질문 ID: ${questionId}):`, error);
         return 0;
       }
     };
@@ -124,7 +121,7 @@ export default {
         questions.value = questionsWithCommentCount;
         totalElements.value = response.data.totalElements || 0;
       } catch (error) {
-        console.error("❌ 질문 목록 불러오기 실패:", error);
+        console.error("질문 목록 불러오기 실패:", error);
       }
     };
 

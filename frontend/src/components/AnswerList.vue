@@ -70,8 +70,8 @@
       </div>
     </div>
 
-    <!-- 댓글 입력 폼 -->
-    <div class="answer-form">
+    <!-- 댓글 입력 폼: 로그인한 경우에만 보임 -->
+    <div v-if="currentUser" class="answer-form">
       <textarea
         v-model="newAnswer"
         class="form-control"
@@ -81,6 +81,10 @@
       <button @click="submitAnswer" class="btn btn-primary mt-2">
         답변 등록
       </button>
+    </div>
+    <!-- 로그인하지 않은 경우 안내 메시지 -->
+    <div v-else class="text-center text-muted mt-3">
+      답변 작성은 로그인이 필요합니다.
     </div>
   </div>
 </template>
@@ -194,6 +198,7 @@ export default {
       newAnswer,
       editMode,
       editedContent,
+      currentUser,
       submitAnswer,
       deleteAnswer,
       startEdit,

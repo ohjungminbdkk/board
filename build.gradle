@@ -3,13 +3,36 @@ plugins {
 	id 'org.springframework.boot' version '3.4.2'
 	id 'io.spring.dependency-management' version '1.1.7'
     id 'war'
+    id 'com.github.node-gradle.node' version '7.0.1'
 }
 
 apply plugin: 'war'
+
 bootWar {
     archiveBaseName = '-'
     archiveFileName = 'MyApp.war'
     archiveVersion = "1.0.0"
+}
+
+node {
+    version = '22.13.1'
+    npmVersion = '10.9.2'
+    download = true
+    nodeProjectDir = file("${projectDir}/frontend")
+}
+
+task buildFrontEnd(type: Exec) {
+    workingDir 'frontend'
+    // 하나의 commandLine으로 두 명령을 &&로 연결
+    commandLine 'cmd', '/c', 'npm install && npm run build'
+}
+
+processResources.dependsOn buildFrontEnd
+
+jar {
+    from('frontend/dist') {
+        into 'static'
+    }
 }
 
 java {
