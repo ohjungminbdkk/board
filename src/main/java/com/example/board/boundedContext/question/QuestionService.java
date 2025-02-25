@@ -3,6 +3,7 @@ package com.example.board.boundedContext.question;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -29,7 +30,11 @@ public class QuestionService {
 		int offset = page * limit;
 		List<Question> questionList = questionMapper.findAllWithKw(offset, limit, kw);
 
-		int total = questionMapper.countAllWithKw(kw); // 전체 개수 조회
+		// depth = 1인 댓글을 제거 (댓글은 depth = 0인 질문에 포함되지 않도록)
+		questionList = questionList.stream().filter(q -> q.getDepth() == 0) // depth = 0인 질문만 필터링
+				.collect(Collectors.toList());
+
+		int total = questionList.size();
 		Pageable pageable = PageRequest.of(page, limit);
 		return new PageImpl<>(questionList, pageable, total);
 	}

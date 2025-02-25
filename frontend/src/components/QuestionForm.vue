@@ -17,9 +17,9 @@
         <button @click="submitQuestion" class="btn btn-success btn-sm">
           등록
         </button>
-        <router-link to="/" class="btn btn-secondary btn-sm mx-2"
-          >취소</router-link
-        >
+        <router-link to="/" class="btn btn-secondary btn-sm mx-2">
+          취소
+        </router-link>
       </div>
     </div>
   </div>
@@ -37,8 +37,18 @@ export default {
   },
   methods: {
     async submitQuestion() {
+      // 빈 칸 체크
       if (!this.subject.trim() || !this.content.trim()) {
         alert("제목과 내용을 입력하세요.");
+        return;
+      }
+      // 길이 제한 체크
+      if (this.subject.trim().length > 200) {
+        alert("제목은 200자 이내로 입력하세요.");
+        return;
+      }
+      if (this.content.trim().length > 20000) {
+        alert("내용은 20000자 이내로 입력하세요.");
         return;
       }
 

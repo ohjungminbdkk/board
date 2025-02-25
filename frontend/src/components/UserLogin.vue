@@ -11,6 +11,7 @@
           id="username"
           class="form-control"
           v-model="username"
+          required
         />
       </div>
       <div class="mb-3">
@@ -20,6 +21,7 @@
           id="password"
           class="form-control"
           v-model="password"
+          required
         />
       </div>
       <button type="submit" class="btn btn-primary">로그인</button>
@@ -42,6 +44,10 @@ export default {
     const router = useRouter();
 
     const handleLogin = async () => {
+      if (!username.value || !password.value) {
+        errorMessage.value = "모든 필드를 입력해주세요.";
+        return;
+      }
       try {
         await axios.post("/user/login", {
           username: username.value,
@@ -50,8 +56,8 @@ export default {
         await userStore.fetchUser();
         router.push("/");
       } catch (error) {
-        errorMessage.value =
-          "로그인 실패: " + (error.response?.data?.error || "서버 오류");
+        // 로그인 실패 시 고정 메시지 출력
+        errorMessage.value = "아이디 혹은 비밀번호를 확인해주세요.";
       }
     };
 

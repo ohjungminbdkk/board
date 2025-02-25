@@ -30,9 +30,7 @@ public interface QuestionMapper {
 
 	// 답변 수정
 	void updateAnswer(Question question);
-	
+
 	// 답변 조회
 	Question findFirstByIdAndDepth(@Param("id") Integer id, @Param("depth") Integer depth);
-	
-	int countAllWithKw(@Param("kw") String kw);
 }
