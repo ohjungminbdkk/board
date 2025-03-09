@@ -77,19 +77,21 @@ class QuestionServiceTest {
 
 		Question q1 = new Question();
 		q1.setId(1);
+		q1.setDepth(0);
 		q1.setSubject("질문 1");
 		q1.setAuthor(user);
 
 		Question q2 = new Question();
 		q2.setId(2);
+		q2.setDepth(0);
 		q2.setSubject("질문 2");
 		q2.setAuthor(user);
 
 		List<Question> mockList = Arrays.asList(q1, q2);
-		when(questionMapper.findAllWithKw(0, 10, "")).thenReturn(mockList);
-		when(questionMapper.countAllWithKw("")).thenReturn(2);
+		when(questionMapper.findAll(0, 10)).thenReturn(mockList);
+		when(questionMapper.countAll()).thenReturn(2);
 
-		Page<Question> resultPage = questionService.findQuestionAll(0, "");
+		Page<Question> resultPage = questionService.findQuestionAll(0);
 
 		assertThat(resultPage.getContent()).hasSize(2);
 		assertThat(resultPage.getContent().get(0).getSubject()).isEqualTo("질문 1");
