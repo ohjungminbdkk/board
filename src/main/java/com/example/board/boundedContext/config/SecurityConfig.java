@@ -51,6 +51,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/answers/question/**").authenticated()
                 .requestMatchers("/api/user/me").authenticated()
                 .requestMatchers("/api/answers/**").authenticated()
+                .requestMatchers("/api/**").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
