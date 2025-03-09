@@ -1,6 +1,6 @@
 package com.example.board.boundedContext.user;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 

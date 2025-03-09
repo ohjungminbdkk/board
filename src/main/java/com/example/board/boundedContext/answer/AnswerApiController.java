@@ -5,7 +5,7 @@ import com.example.board.boundedContext.question.QuestionService;
 import com.example.board.boundedContext.user.SiteUser;
 import com.example.board.boundedContext.user.UserApiController;
 import com.example.board.boundedContext.user.UserService;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

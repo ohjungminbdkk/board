@@ -87,7 +87,6 @@ class QuestionServiceTest {
 
 		List<Question> mockList = Arrays.asList(q1, q2);
 		when(questionMapper.findAllWithKw(0, 10, "")).thenReturn(mockList);
-		when(questionMapper.countAllWithKw("")).thenReturn(2);
 
 		Page<Question> resultPage = questionService.findQuestionAll(0, "");
 
