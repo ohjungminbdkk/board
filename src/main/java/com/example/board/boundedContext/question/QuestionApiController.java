@@ -32,10 +32,11 @@ public class QuestionApiController {
 			@RequestParam(value = "kw", defaultValue = "") String kw) {
 		if (!kw.isEmpty()) {
 			logger.info("[GET] KEYWORD [" + kw + "] 키워드 조회");
+			return ResponseEntity.ok(questionService.findQuestionKw(page, kw));
 		} else {
 			logger.info("[GET] 질문 리스트 조회");
+			return ResponseEntity.ok(questionService.findQuestionAll(page));
 		}
-		return ResponseEntity.ok(questionService.findQuestionAll(page, kw));
 	}
 
 	// 질문 상세 조회
