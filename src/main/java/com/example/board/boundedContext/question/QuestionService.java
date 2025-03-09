@@ -24,19 +24,42 @@ public class QuestionService {
 
 	private final QuestionMapper questionMapper;
 
-	// 모든 질문 조회
-	public Page<Question> findQuestionAll(int page, String kw) {
-		int limit = 10;
-		int offset = page * limit;
-		List<Question> questionList = questionMapper.findAllWithKw(offset, limit, kw);
+	// 모든 질문 조회 (검색어 제외)
+	public Page<Question> findQuestionAll(int page) {
+		int limit = 10; // 페이지당 항목 수
+		int offset = page * limit; // 오프셋 계산
+		List<Question> questionList = questionMapper.findAll(offset, limit); // 검색어 없이 전체 질문 조회
 
 		// depth = 1인 댓글을 제거 (댓글은 depth = 0인 질문에 포함되지 않도록)
 		questionList = questionList.stream().filter(q -> q.getDepth() == 0) // depth = 0인 질문만 필터링
 				.collect(Collectors.toList());
 
-		int total = questionList.size();
+		// 전체 질문 개수
+		int total = questionMapper.countAll(); // 전체 질문의 개수 조회
 		Pageable pageable = PageRequest.of(page, limit);
 		return new PageImpl<>(questionList, pageable, total);
+	}
+
+	// 검색어 조회
+	public Page<Question> findQuestionKw(int page, String kw) {
+		int limit = 10;
+		int offset = page * limit;
+		List<Question> questionList = questionMapper.findAllWithKw(offset, limit, kw);
+
+		List<Question> questionKwList = questionList.stream().filter(q -> q.getDepth() == 0) // depth = 0인 질문만 필터링
+				.collect(Collectors.toList());
+
+		// 질문과 답변 중복되는 갯수
+		int cnt = questionList.size() - questionKwList.size();
+
+		// depth = 1인 댓글을 포함하여 depth가 0이거나 1인 모든 질문을 포함시킴
+		int total = questionMapper.countAllWithKw(kw); // 검색어를 고려한 전체 개수
+		
+		// 질문과 답변 중복되는 갯수 차감
+		total = total - cnt;
+
+		Pageable pageable = PageRequest.of(page, limit);
+		return new PageImpl<>(questionKwList, pageable, total);
 	}
 
 	// 특정 질문 조회

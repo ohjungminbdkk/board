@@ -7,9 +7,6 @@ import java.util.List;
 @Mapper
 public interface QuestionMapper {
 
-	// 모든 질문 조회 (페이징 없이 전체 조회)
-	List<Question> findAll();
-
 	// 특정 질문 조회 (ID로 찾기)
 	Question findById(@Param("id") Integer id);
 
@@ -33,4 +30,12 @@ public interface QuestionMapper {
 
 	// 답변 조회
 	Question findFirstByIdAndDepth(@Param("id") Integer id, @Param("depth") Integer depth);
+
+	// 페이징 처리를 위한 모든 질문 조회 (페이징 적용)
+	List<Question> findAll(@Param("offset") int offset, @Param("limit") int limit);
+
+	// 전체 질문 개수 조회 (페이징을 위해 필요)
+	int countAll();
+
+	int countAllWithKw(@Param("kw") String kw);
 }
